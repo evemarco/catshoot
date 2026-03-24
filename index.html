@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatCaptcha — The Absurd Captcha</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ChatCaptcha <span class="subtitle">— Verify you are not a robot (spoiler: it's impossible)</span></h1>
+
+        <div class="captcha-wrapper">
+            <div class="captcha-label">
+                Click on the <strong>cat</strong> before it disappears. Watch out for the <strong>dog</strong>!
+            </div>
+
+            <div id="captcha-zone" class="captcha-zone">
+                <canvas id="bg-canvas" class="bg-canvas"></canvas>
+                <canvas id="animal-canvas" class="animal-canvas"></canvas>
+
+                <!-- Overlays -->
+                <div id="overlay-success" class="overlay overlay-success hidden">
+                    <div class="overlay-content">
+                        <div class="overlay-icon">&#x1F389;</div>
+                        <h2>CAPTCHA PASSED!</h2>
+                        <p>Congratulations, you killed 3 cats.<br>You are an efficient monster.</p>
+                        <button id="btn-retry-success" class="btn-retry">Play again (no compassion)</button>
+                    </div>
+                </div>
+
+                <div id="overlay-fail" class="overlay overlay-fail hidden">
+                    <div class="overlay-content">
+                        <div class="overlay-icon">&#x1F62D;</div>
+                        <h2>CAPTCHA FAILED</h2>
+                        <p id="fail-reason">A cat slipped through your paws.</p>
+                        <button id="btn-retry-fail" class="btn-retry">Try again (brave)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="captcha-hud">
+                <div class="hud-item">
+                    <span class="hud-label">Cats eliminated:</span>
+                    <span id="kill-count" class="hud-value">0</span>
+                    <span class="hud-max">/ 3</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Status:</span>
+                    <span id="game-status" class="hud-value status-active">In progress...</span>
+                </div>
+                <div class="hud-item">
+                    <button id="btn-start" class="btn-start">Start Captcha</button>
+                </div>
+            </div>
+
+            <div class="captcha-instructions">
+                <p>&#x1F431; Click on cat = win | &#x1F415; Click on dog = lose | &#x1F6AB; Cat escapes = lose</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
