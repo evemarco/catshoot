@@ -15,10 +15,12 @@
 
     const overlaySuccess = document.getElementById('overlay-success');
     const overlayFail = document.getElementById('overlay-fail');
+    const overlayStart = document.getElementById('overlay-start');
     const failReason = document.getElementById('fail-reason');
     const killCountEl = document.getElementById('kill-count');
     const gameStatusEl = document.getElementById('game-status');
     const btnStart = document.getElementById('btn-start');
+    const btnStartOverlay = document.getElementById('btn-start-overlay');
     const btnRetrySuccess = document.getElementById('btn-retry-success');
     const btnRetryFail = document.getElementById('btn-retry-fail');
 
@@ -799,7 +801,8 @@
         animalActive = false;
         setStatus('PASSED!', 'status-success');
         btnStart.disabled = false;
-        btnStart.textContent = 'Play Again';
+        btnStart.textContent = 'Start Captcha';
+        overlayStart.classList.remove('hidden');
         playSuccess();
         overlaySuccess.classList.remove('hidden');
         captchaZone.classList.add('inactive');
@@ -810,7 +813,8 @@
         animalActive = false;
         setStatus('FAILED', 'status-dead');
         btnStart.disabled = false;
-        btnStart.textContent = 'Try Again';
+        btnStart.textContent = 'Start Captcha';
+        overlayStart.classList.remove('hidden');
         playFail();
         failReason.textContent = reason;
         overlayFail.classList.remove('hidden');
@@ -829,6 +833,7 @@
         setStatus('Get ready...', 'status-killing');
         btnStart.disabled = true;
         btnStart.textContent = 'In progress...';
+        overlayStart.classList.add('hidden');
         overlaySuccess.classList.add('hidden');
         overlayFail.classList.add('hidden');
         captchaZone.classList.remove('inactive');
@@ -920,6 +925,10 @@
         startGame();
     });
 
+    btnStartOverlay.addEventListener('click', function () {
+        startGame();
+    });
+
     btnRetrySuccess.addEventListener('click', function () {
         startGame();
     });
@@ -936,6 +945,6 @@
 
     resizeCanvases();
     drawCaptchaBackground();
-    setStatus('Click "Start Captcha" to begin', 'status-active');
+    setStatus('Click Start to begin', 'status-active');
 
 })();
