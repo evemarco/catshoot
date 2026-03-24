@@ -1,5 +1,5 @@
 // ============================================================
-// ChatCaptcha — The Absurd Captcha
+// CatShoot — The Absurd Captcha
 // Pure JavaScript, no dependencies
 // ============================================================
 

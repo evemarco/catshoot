@@ -1,4 +1,4 @@
-# ChatCaptcha — The Absurd Captcha
+# CatShoot — The Absurd Captcha
 
 A completely ridiculous and unrealistic captcha for hackathons. Click the cats, avoid the dogs, kill 3 in a row to prove you are not a robot.
 
