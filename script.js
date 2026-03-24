@@ -779,9 +779,18 @@
 
     function animalEscaped(animal) {
         animalActive = false;
+        currentAnimal = null;
 
         if (animal.type === 'cat') {
             gameFail('A cat slipped through your paws!');
+        } else {
+            // Dog escaped - that's fine, spawn next animal
+            setStatus('Dog escaped. Next...', 'status-active');
+            setTimeout(() => {
+                if (gameRunning && !animalActive) {
+                    spawnAnimal();
+                }
+            }, SPAWN_DELAY);
         }
     }
 
@@ -789,6 +798,8 @@
         gameRunning = false;
         animalActive = false;
         setStatus('PASSED!', 'status-success');
+        btnStart.disabled = false;
+        btnStart.textContent = 'Play Again';
         playSuccess();
         overlaySuccess.classList.remove('hidden');
         captchaZone.classList.add('inactive');
@@ -798,6 +809,8 @@
         gameRunning = false;
         animalActive = false;
         setStatus('FAILED', 'status-dead');
+        btnStart.disabled = false;
+        btnStart.textContent = 'Try Again';
         playFail();
         failReason.textContent = reason;
         overlayFail.classList.remove('hidden');
@@ -813,17 +826,22 @@
         lastTime = performance.now();
 
         updateHUD();
-        setStatus('In progress...', 'status-active');
+        setStatus('Get ready...', 'status-killing');
         btnStart.disabled = true;
+        btnStart.textContent = 'In progress...';
         overlaySuccess.classList.add('hidden');
         overlayFail.classList.add('hidden');
         captchaZone.classList.remove('inactive');
 
         drawCaptchaBackground();
 
+        // Give user time to get ready before first spawn
         setTimeout(() => {
-            if (gameRunning) spawnAnimal();
-        }, 500);
+            if (gameRunning) {
+                setStatus('GO! Find the cat!', 'status-killing');
+                spawnAnimal();
+            }
+        }, 1500);
 
         if (animFrameId) cancelAnimationFrame(animFrameId);
         gameLoop(performance.now());
@@ -918,5 +936,6 @@
 
     resizeCanvases();
     drawCaptchaBackground();
+    setStatus('Click "Start Captcha" to begin', 'status-active');
 
 })();
