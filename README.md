@@ -2,6 +2,14 @@
 
 A completely ridiculous and unrealistic captcha for hackathons. Click the cats, avoid the dogs, kill 3 in a row to prove you are not a robot.
 
+## About
+
+This project was built for the **Worst Captcha Hackathon** organized by [KiloCode](https://kilo.ai) in partnership with Xiaomi MiMo. The challenge was to create the worst, most absurd captcha experience ever — and this is what came out.
+
+**What is KiloCode?** KiloCode is an open-source AI coding agent for VS Code and JetBrains. It helps developers write, refactor, and debug code using agentic AI workflows — think of it as a coding assistant on steroids that can plan, execute, and iterate on complex tasks autonomously. KiloCode runs a competitive league ([Kilo League](https://kilo.ai/league)) with weekly challenges and hackathons pushing the boundaries of AI-assisted development.
+
+**Which AI model was used?** This captcha was built entirely using the **Xiaomi MiMo v2 Omni** model through KiloCode's platform.
+
 ## How It Works
 
 - **Click the cat** before it escapes the captcha zone
