@@ -194,29 +194,6 @@ h1 .subtitle {
     letter-spacing: 0.3px;
 }
 
-.btn-start-large {
-    padding: 16px 40px;
-    font-size: 1.2rem;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
-}
-
-.btn-start-large:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
-}
-
-.overlay-start {
-    background: rgba(15, 15, 26, 0.85);
-    backdrop-filter: blur(8px);
-    z-index: 20;
-}
-
-.overlay-start.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
 .btn-start {
     background: linear-gradient(135deg, #7c3aed, #6366f1);
     color: white;

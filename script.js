@@ -15,12 +15,10 @@
 
     const overlaySuccess = document.getElementById('overlay-success');
     const overlayFail = document.getElementById('overlay-fail');
-    const overlayStart = document.getElementById('overlay-start');
     const failReason = document.getElementById('fail-reason');
     const killCountEl = document.getElementById('kill-count');
     const gameStatusEl = document.getElementById('game-status');
     const btnStart = document.getElementById('btn-start');
-    const btnStartOverlay = document.getElementById('btn-start-overlay');
     const btnRetrySuccess = document.getElementById('btn-retry-success');
     const btnRetryFail = document.getElementById('btn-retry-fail');
 
@@ -646,7 +644,71 @@
         c.restore();
     }
 
-    // ===== Game State =====
+    // ===== Start Screen (drawn on canvas) =====
+    let startBtnRect = null;
+
+    function drawStartScreen() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Dim overlay
+        ctx.fillStyle = 'rgba(15, 15, 26, 0.88)';
+        ctx.fillRect(0, 0, W, H);
+
+        // Cat emoji
+        ctx.font = '48px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('\u{1F431}', W / 2, H / 2 - 80);
+
+        // Title
+        ctx.font = 'bold 28px "Segoe UI", sans-serif';
+        ctx.fillStyle = '#c084fc';
+        ctx.fillText('CatShoot', W / 2, H / 2 - 25);
+
+        // Instructions
+        ctx.font = '14px "Segoe UI", sans-serif';
+        ctx.fillStyle = '#aaa';
+        ctx.fillText('Click on 3 cats before they escape.', W / 2, H / 2 + 10);
+        ctx.fillText("Don't click on dogs!", W / 2, H / 2 + 32);
+
+        // Button
+        const btnW = 220;
+        const btnH = 50;
+        const btnX = W / 2 - btnW / 2;
+        const btnY = H / 2 + 55;
+        startBtnRect = { x: btnX, y: btnY, w: btnW, h: btnH };
+
+        // Button gradient
+        const grad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
+        grad.addColorStop(0, '#7c3aed');
+        grad.addColorStop(1, '#6366f1');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        const r = 12;
+        ctx.moveTo(btnX + r, btnY);
+        ctx.lineTo(btnX + btnW - r, btnY);
+        ctx.quadraticCurveTo(btnX + btnW, btnY, btnX + btnW, btnY + r);
+        ctx.lineTo(btnX + btnW, btnY + btnH - r);
+        ctx.quadraticCurveTo(btnX + btnW, btnY + btnH, btnX + btnW - r, btnY + btnH);
+        ctx.lineTo(btnX + r, btnY + btnH);
+        ctx.quadraticCurveTo(btnX, btnY + btnH, btnX, btnY + btnH - r);
+        ctx.lineTo(btnX, btnY + r);
+        ctx.quadraticCurveTo(btnX, btnY, btnX + r, btnY);
+        ctx.closePath();
+        ctx.fill();
+
+        // Button shadow glow
+        ctx.shadowColor = 'rgba(124, 58, 237, 0.4)';
+        ctx.shadowBlur = 15;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Button text
+        ctx.font = 'bold 16px "Segoe UI", sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('\u25B6  Start Captcha', W / 2, btnY + 32);
+
+        ctx.textAlign = 'left';
+    }
     const ANIMAL_SIZE = 44;
     const MIN_SPEED = 1.5;
     const MAX_SPEED = 4.5;
@@ -802,7 +864,6 @@
         setStatus('PASSED!', 'status-success');
         btnStart.disabled = false;
         btnStart.textContent = 'Start Captcha';
-        overlayStart.classList.remove('hidden');
         playSuccess();
         overlaySuccess.classList.remove('hidden');
         captchaZone.classList.add('inactive');
@@ -814,7 +875,6 @@
         setStatus('FAILED', 'status-dead');
         btnStart.disabled = false;
         btnStart.textContent = 'Start Captcha';
-        overlayStart.classList.remove('hidden');
         playFail();
         failReason.textContent = reason;
         overlayFail.classList.remove('hidden');
@@ -833,7 +893,6 @@
         setStatus('Get ready...', 'status-killing');
         btnStart.disabled = true;
         btnStart.textContent = 'In progress...';
-        overlayStart.classList.add('hidden');
         overlaySuccess.classList.add('hidden');
         overlayFail.classList.add('hidden');
         captchaZone.classList.remove('inactive');
@@ -901,13 +960,22 @@
 
     // ===== Click Handler =====
     captchaZone.addEventListener('click', function (e) {
-        if (!gameRunning || !currentAnimal || !currentAnimal.alive) return;
-
         const rect = captchaZone.getBoundingClientRect();
         const scaleX = W / rect.width;
         const scaleY = H / rect.height;
         const clickX = (e.clientX - rect.left) * scaleX;
         const clickY = (e.clientY - rect.top) * scaleY;
+
+        // Check if clicking start button on canvas
+        if (!gameRunning && startBtnRect) {
+            const b = startBtnRect;
+            if (clickX >= b.x && clickX <= b.x + b.w && clickY >= b.y && clickY <= b.y + b.h) {
+                startGame();
+                return;
+            }
+        }
+
+        if (!gameRunning || !currentAnimal || !currentAnimal.alive) return;
 
         const a = currentAnimal;
         const dx = clickX - a.x;
@@ -925,10 +993,6 @@
         startGame();
     });
 
-    btnStartOverlay.addEventListener('click', function () {
-        startGame();
-    });
-
     btnRetrySuccess.addEventListener('click', function () {
         startGame();
     });
@@ -941,10 +1005,12 @@
     window.addEventListener('resize', function () {
         resizeCanvases();
         drawCaptchaBackground();
+        if (!gameRunning) drawStartScreen();
     });
 
     resizeCanvases();
     drawCaptchaBackground();
+    drawStartScreen();
     setStatus('Click Start to begin', 'status-active');
 
 })();
